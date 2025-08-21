@@ -1,25 +1,74 @@
-# OMDb API Integration
+# Neueda Activity: OMDb Favourites App
 
-This project integrates with the [OMDb API](http://www.omdbapi.com/) to fetch movie and TV show data.
+This application allows users to search for movies and TV shows using the OMDb API, and save their favourites to a local database. Users can add, update, view and delete their favourite movies or shows, along with custom ratings and details.
 
+## API Endpoints
 
-## Supported Parameters
+All endpoints are prefixed with `/api`.
 
-- `t` &mdash; Title search (exact match)
-- `s` &mdash; Search (multiple results, partial match)
-- `i` &mdash; IMDb ID (e.g., `tt3896198`)
-- `y` &mdash; Year of release (optional filter)
-- `plot` &mdash; `short` (default) or `full`
-- `type` &mdash; `movie`, `series`, or `episode`
-- `page` &mdash; Page number (for search results, up to 100 results)
-- `r` &mdash; Response format: `json` (default) or `xml`
+- `GET /api/movie/:title`  
+  Fetch details for a specific movie by title.
 
-## Example Requests
+- `GET /api/show?title=...`  
+  Fetch details for a TV show by title.
 
-- **Search by Title (exact match):**  
-  `http://www.omdbapi.com/?t=Inception&apikey=${API_KEY}`
+- `GET /api/favourites`  
+  Retrieve all favourite entries from the database.
 
-- **Search by IMDb ID:**  
-  `http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}`
+- `POST /api/favourites`  
+  Add a new favourite.  
+  **Body:**  
+  ```json
+  {
+    "title": "string",
+    "rating": "number",
+    "release_date": "string",
+    "director": "string",
+    "description": "string",
+    "type": "movie|series"
+  }
+  ```
 
-Refer to the [OMDb API documentation](http://www.omdbapi.com/) for more details.
+- `PATCH /api/favourites/:id`  
+  Update an existing favourite by ID.
+
+- `DELETE /api/favourites/:id`  
+  Remove a favourite by ID.
+
+## Database Schema
+
+Table: `favourites`
+
+| Column        | Type    | Description                |
+|---------------|---------|----------------------------|
+| id            | INT     | Primary key, auto-increment|
+| title         | VARCHAR | Movie/Show title           |
+| rating        | INT     | User rating                |
+| release_date  | VARCHAR | Release date               |
+| director      | VARCHAR | Director name              |
+| description   | TEXT    | Description                |
+| type          | VARCHAR | 'movie' or 'series'        |
+
+## External API Used
+
+- [OMDb API](http://www.omdbapi.com/)  
+  Used to fetch movie and TV show data.  
+  Requires an API key (set in `.env` as `API_KEY`).
+
+## How to Run Locally
+
+1. **Clone the repository**
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+3. **Set up environment variables**  
+   Edit `.env` with your database and OMDb API key.
+
+4. **Start the server**
+   ```bash
+   npm start
+   ```
+5. **Access the API**
+   - API endpoints: `http://localhost:3000/api/...`
+   - Swagger docs: `http://localhost:3000/api-docs`
