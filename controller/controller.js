@@ -67,7 +67,7 @@ async function updateFavourites(req, res) {
   try {
     const updateFavourite = await Favourite.update(
       { title, rating, release_date, director, description, type },
-      { where: { id } }
+      { where: { id: id } }
     );
     console.log("Updated:", updateFavourite);
     res.status(201).json(updateFavourite);
@@ -80,7 +80,7 @@ async function updateFavourites(req, res) {
 async function deleteFavourites(req, res) {
   const { id } = req.params;
   try {
-    const deleteFavourite = await Favourite.destroy({ where: { id } });
+    const deleteFavourite = await Favourite.destroy({ where: {id: id } });
     console.log("Deleted:", deleteFavourite);
     res.status(201).json(deleteFavourite);
   } catch (error) {
