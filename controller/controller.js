@@ -24,9 +24,9 @@ function getMovie(req, res) {
 }
 
 function getShow(req, res) {
-  let showTitle = req.query.title;
+  let showTitle = req.params.title;
   axios
-    .get(OMDB_URL + `q=${showTitle}&type=series`)
+    .get(OMDB_URL + `t=${showTitle}&type=series`)
     .then((response) => {
       console.log(response.data);
       res.status(200).json({ shows: response.data });
@@ -77,11 +77,11 @@ async function addFavourites(req, res) {
 
 async function updateFavourites(req, res) {
   const { id } = req.params;
-  const { title, rating, release_date, director, description, type } = req.body;
+  const { rating } = req.body;
 
   try {
     const updateFavourite = await Favourite.update(
-      { title, rating, release_date, director, description, type },
+      { rating },
       { where: { id: id } }
     );
     console.log("Updated:", updateFavourite);
