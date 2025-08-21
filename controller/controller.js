@@ -8,15 +8,12 @@ dotenv.config({ path: "./.env" });
 // Set up the OMDB API URL with the API key from environment variables
 const OMDB_API_KEY = config.api_key
 const OMDB_URL = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&`;
-console.log("URL:", OMDB_URL);
 
 // Controller functions
 function getMovie(req, res) {
   let movieTitle = req.params.title;
-  let API_KEY = process.env.API_KEY;
-  console.log("Movie Url:", OMDB_API + `t=${movieTitle}&type=movie`);
   axios
-    .get(OMDB_API + `t=${movieTitle}&type=movie`)
+    .get(OMDB_URL + `t=${movieTitle}&type=movie`)
     .then((response) => {
       console.log(response.data);
       res.status(200).json({ movies: response.data });
@@ -30,7 +27,7 @@ function getMovie(req, res) {
 function getShow(req, res) {
   let showTitle = req.query.title;
   axios
-    .get(OMDB_API + `q=${showTitle}&type=series`)
+    .get(OMDB_URL + `q=${showTitle}&type=series`)
     .then((response) => {
       console.log(response.data);
       res.status(200).json({ shows: response.data });
