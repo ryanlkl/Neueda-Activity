@@ -1,11 +1,11 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import swaggerDoc from "./swagger.json" assert { type: "json" };
+import swaggerDoc from "./swagger.json" with { type: "json" };
 import dotenv from "dotenv";
 import router from "./routes/routes.js";
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: "./.env" });
 
 // Import Routes
 const app = express();
@@ -62,3 +62,4 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
   console.log(`Documentation is running on http://localhost:${port}`);
 });
+

@@ -1,12 +1,22 @@
-require("dotenv").config();
-const axios = require("axios");
-const Favourite = require("../models/favourites");
-var OMDB_API = `https://www.omdbapi.com/t?apikey=${process.env.API_KEY}&`;
+import dotenv from "dotenv";
+import axios from "axios";
+import Favourite from "../models/favourites.js";
+import { config } from "../config.js";
+dotenv.config({ path: "./.env" });
 
+
+// Set up the OMDB API URL with the API key from environment variables
+const OMDB_API_KEY = config.api_key
+const OMDB_URL = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&`;
+console.log("URL:", OMDB_URL);
+
+// Controller functions
 function getMovie(req, res) {
-  let movieTitle = req.query.title;
+  let movieTitle = req.params.title;
+  let API_KEY = process.env.API_KEY;
+  console.log("Movie Url:", OMDB_API + `t=${movieTitle}&type=movie`);
   axios
-    .get(OMDB_API + `q=${movieTitle}&type=movie`)
+    .get(OMDB_API + `t=${movieTitle}&type=movie`)
     .then((response) => {
       console.log(response.data);
       res.status(200).json({ movies: response.data });
@@ -88,3 +98,12 @@ async function deleteFavourites(req, res) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+export {
+  getMovie,
+  getShow,
+  getFavourites, 
+  addFavourites,
+  updateFavourites,
+  deleteFavourites,
+};
