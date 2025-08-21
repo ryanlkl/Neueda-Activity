@@ -1,7 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 const Favourite = require("../models/favourites");
-const OMDB_API = `https://www.omdbapi.com/t?apikey=${process.env.API_KEY}&`;
+var OMDB_API = `https://www.omdbapi.com/t?apikey=${process.env.API_KEY}&`;
 
 function getMovie(req, res) {
   let movieTitle = req.query.title;
