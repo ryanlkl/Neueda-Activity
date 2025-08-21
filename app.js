@@ -31,20 +31,9 @@ app.use((req, res, next) => {
 // Implement validation middleware
 app.use((req, res, next) => {
   if (req.path === "/favourites/" && req.method === "POST") {
-    if (!req.body.title || !req.body.rating) {
+    if (!req.body.title || !req.body.rating || !req.body.type) {
       return res.status(500).json({
-        error: "Missing title and/or rating",
-      });
-    }
-  }
-  next();
-});
-
-app.use((req, res, next) => {
-  if (req.path.includes("/favourites/") && req.method === "PATCH") {
-    if (!req.body.rating) {
-      return res.status(500).json({
-        error: "Missing rating",
+        error: "Missing title, type and/or rating",
       });
     }
   }
