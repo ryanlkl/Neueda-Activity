@@ -9,3 +9,6 @@ Content-Type: application/json
   "title": "Inception",
   "rating": 4.5
 }
+
+###
+GET http://localhost:3000/api/docs HTTP/1.1
