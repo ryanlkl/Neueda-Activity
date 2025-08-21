@@ -1,6 +1,180 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Simple API"
+        "title": "OMDb Favourites API",
+        "version": "1.0.0",
+        "description": "API for searching movies/shows via OMDb and managing user favourites."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/api"
+        }
+    ],
+    "paths": {
+        "/movies/{title}": {
+            "get": {
+                "summary": "Get movie details by title",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Movie details",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "object" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/shows/{title}": {
+            "post": {
+                "summary": "Get show details by title",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show details",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "object" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/favourites": {
+            "get": {
+                "summary": "Get all favourites",
+                "responses": {
+                    "200": {
+                        "description": "List of favourites",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/components/schemas/Favourite" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add a new favourite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/FavouriteInput" }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Favourite created",
+                        "content": {
+                            "application/json": {
+                                "schema": { "$ref": "#/components/schemas/Favourite" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/favourites/{id}": {
+            "patch": {
+                "summary": "Update a favourite by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer" }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/FavouriteInput" }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Favourite updated",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "object" }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a favourite by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer" }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Favourite deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "object" }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Favourite": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer" },
+                    "title": { "type": "string" },
+                    "rating": { "type": "number" },
+                    "release_date": { "type": "string" },
+                    "director": { "type": "string" },
+                    "description": { "type": "string" },
+                    "type": { "type": "string", "enum": ["movie", "series"] }
+                }
+            },
+            "FavouriteInput": {
+                "type": "object",
+                "properties": {
+                    "title": { "type": "string" },
+                    "rating": { "type": "number" },
+                    "release_date": { "type": "string" },
+                    "director": { "type": "string" },
+                    "description": { "type": "string" },
+                    "type": { "type": "string", "enum": ["movie", "series"] }
+                },
+                "required": ["title", "rating", "release_date", "director", "description", "type"]
+            }
+        }
     }
 }
