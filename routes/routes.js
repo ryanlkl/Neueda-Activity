@@ -1,5 +1,5 @@
 import express from 'express';
-import { controller } from '../controller/controller.js';
+import * as controller from '../controller/controller.js';
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.post('/favourites', controller.addFavourites);
 router.patch('/favourites/:id', controller.updateFavourites);
 router.delete('/favourites/:id', controller.deleteFavourites);
 
-module.exports = router;
+export default router;
