@@ -4,9 +4,8 @@ import Favourite from "../models/favourites.js";
 import { config } from "../config.js";
 dotenv.config({ path: "./.env" });
 
-
 // Set up the OMDB API URL with the API key from environment variables
-const OMDB_API_KEY = config.api_key
+const OMDB_API_KEY = config.api_key;
 const OMDB_URL = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&`;
 
 // Controller functions
@@ -49,15 +48,24 @@ async function getFavourites(req, res) {
 }
 
 async function addFavourites(req, res) {
-  const { title, rating, release_date, director, description, type } = req.body;
+  let { title, rating, type } = req.body;
+
+  let dbTitle, dbDescription, dbReleaseDate, dbDirector;
+  await axios.get(OMDB_URL + `t=${title}&type=${type}`).then((response) => {
+    dbTitle = response.data.Title;
+    dbReleaseDate = response.data.Released;
+    dbDescription = response.data.Plot;
+    dbDirector = response.data.Director;
+  });
+
   try {
     const newFavourite = await Favourite.create({
-      title,
-      rating,
-      release_date,
-      director,
-      description,
-      type,
+      title: dbTitle,
+      rating: rating,
+      release_date: dbReleaseDate,
+      director: dbDirector,
+      description: dbDescription,
+      type: type,
     });
     console.log("New Favourite created:", newFavourite);
     res.status(201).json(newFavourite);
@@ -87,7 +95,7 @@ async function updateFavourites(req, res) {
 async function deleteFavourites(req, res) {
   const { id } = req.params;
   try {
-    const deleteFavourite = await Favourite.destroy({ where: {id: id } });
+    const deleteFavourite = await Favourite.destroy({ where: { id: id } });
     console.log("Deleted:", deleteFavourite);
     res.status(201).json(deleteFavourite);
   } catch (error) {
@@ -99,7 +107,7 @@ async function deleteFavourites(req, res) {
 export {
   getMovie,
   getShow,
-  getFavourites, 
+  getFavourites,
   addFavourites,
   updateFavourites,
   deleteFavourites,
